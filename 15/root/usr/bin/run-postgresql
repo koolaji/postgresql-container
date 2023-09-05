@@ -3,7 +3,7 @@
 export ENABLE_REPLICATION=${ENABLE_REPLICATION:-false}
 
 set -eu
-export_vars=$(cgroup-limits) ; export $export_vars
+#export_vars=$(cgroup-limits) ; export $export_vars
 
 source "${CONTAINER_SCRIPTS_PATH}/common.sh"
 
@@ -30,14 +30,14 @@ fi
 # Use insanely large timeout (24h) to ensure that the potential recovery has
 # enough time here to happen (unless liveness probe kills us).  Note that in
 # case of server failure this command still exists immediately.
-pg_ctl start -w --timeout 86400 -o "-h ''"
+/usr/pgsql-15/bin/pg_ctl start -w --timeout 86400 -o "-h ''"
 
 # This is just a pedantic safety measure (the timeout above is unlikely to
 # happen), but `pt_ctl -w` is not reliable prior to PostgreSQL v10 where it
 # returns exit_status=0 even if the server is still starting.  For more info
 # see the issue#297 and
 # https://www.postgresql.org/message-id/CAB7nPqSJs85wK9aknm%3D_jmS6GnH3SQBhpzKcqs8Qo2LhEg2etw%40mail.gmail.com
-pg_isready
+/usr/pgsql-15/bin/pg_isready
 
 if $PG_INITIALIZED ; then
     process_extending_files \
@@ -51,8 +51,8 @@ process_extending_files \
     "${APP_DATA}/src/postgresql-start" \
     "${CONTAINER_SCRIPTS_PATH}/start"
 
-pg_ctl stop
+/usr/pgsql-15/bin/pg_ctl stop
 
 unset_env_vars
 echo "Starting server..."
-exec postgres "$@"
+exec /usr/pgsql-15/bin/postgres "$@"

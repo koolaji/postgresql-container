@@ -205,7 +205,7 @@ initdb_wrapper ()
 }
 
 function initialize_database() {
-  initdb_wrapper initdb
+  initdb_wrapper /usr/pgsql-15/bin/initdb
 
   # PostgreSQL configuration.
   cat >> "$PGDATA/postgresql.conf" <<EOF
