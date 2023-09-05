@@ -23,7 +23,8 @@ RUN yum -y install glibc-locale-source glibc-langpack-en && localedef -f UTF-8 -
 COPY root /
 RUN chmod 755  -R /var/lib/pgsql/data/
 #COPY ./s2i/bin/ $STI_SCRIPTS_PATH
-
+RUN mkdir -p /etc/postgresql/
+COPY postgresql.conf /etc/postgresql/
 
 USER 26
 ENTRYPOINT ["container-entrypoint"]

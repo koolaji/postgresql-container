@@ -55,4 +55,4 @@ process_extending_files \
 
 unset_env_vars
 echo "Starting server..."
-exec /usr/pgsql-15/bin/postgres "$@"
+exec /usr/pgsql-15/bin/postgres -c 'config_file=/etc/postgresql/postgresql.conf' "$@"
